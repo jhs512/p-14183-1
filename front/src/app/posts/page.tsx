@@ -10,7 +10,10 @@ export default function Page() {
 
   useEffect(() => {
     apiFetch(`/api/v1/posts`)
-      .then(setPosts);
+      .then(setPosts)
+      .catch((error) => {
+        alert(`${error.resultCode} : ${error.msg}`);
+      });
   }, []);
 
   if (posts == null) return <div>로딩중...</div>;
