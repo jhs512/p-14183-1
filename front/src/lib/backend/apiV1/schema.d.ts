@@ -228,7 +228,6 @@ export interface components {
             authorId?: number;
             authorName?: string;
             title?: string;
-            content?: string;
         };
         RsDataPostDto: {
             resultCode?: string;
@@ -289,6 +288,19 @@ export interface components {
             resultCode?: string;
             msg?: string;
             data?: components["schemas"]["MemberLoginResBody"];
+        };
+        PostWithContentDto: {
+            /** Format: int32 */
+            id?: number;
+            /** Format: date-time */
+            createDate?: string;
+            /** Format: date-time */
+            modifyDate?: string;
+            /** Format: int32 */
+            authorId?: number;
+            authorName?: string;
+            title?: string;
+            content?: string;
         };
         MemberWithUsernameDto: {
             /** Format: int32 */
@@ -403,7 +415,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json;charset=UTF-8": components["schemas"]["PostDto"];
+                    "application/json;charset=UTF-8": components["schemas"]["PostWithContentDto"];
                 };
             };
         };
