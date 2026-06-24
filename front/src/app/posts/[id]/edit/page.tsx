@@ -24,7 +24,7 @@ export default function Page({ params }: { params: Promise<{ id: string }> }) {
       .catch((error) => {
         alert(`${error.resultCode} : ${error.msg}`);
       });
-  }, []);
+  }, [id]);
 
   if (post == null) return <div>로딩중...</div>;
 
