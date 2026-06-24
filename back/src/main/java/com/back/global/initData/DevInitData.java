@@ -12,7 +12,7 @@ public class DevInitData {
     @Bean
     ApplicationRunner devInitDataApplicationRunner() {
         return args -> {
-            Ut.cmd.run(
+            Ut.cmd.runAsync(
                     "npx{{DOT_CMD}}",
                     "--yes",
                     "--package", "typescript@v5",
