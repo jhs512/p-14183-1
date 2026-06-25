@@ -23,6 +23,8 @@ public class Member extends BaseEntity {
     private String nickname;
     @Column(unique = true)
     private String apiKey;
+    private String profileImgUrl;
+    private String email;
 
     public Member(int id, String username, String name) {
         setId(id);
@@ -30,11 +32,13 @@ public class Member extends BaseEntity {
         setName(name);
     }
 
-    public Member(String username, String password, String nickname) {
+    public Member(String username, String password, String nickname, String profileImgUrl, String email) {
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.apiKey = UUID.randomUUID().toString();
+        this.profileImgUrl = profileImgUrl;
+        this.email = email;
     }
 
     public String getName() {
@@ -70,5 +74,11 @@ public class Member extends BaseEntity {
             authorities.add("ROLE_ADMIN");
 
         return authorities;
+    }
+
+    public void modify(String nickname, String profileImgUrl, String email) {
+        this.nickname = nickname;
+        this.profileImgUrl = profileImgUrl;
+        this.email = email;
     }
 }
