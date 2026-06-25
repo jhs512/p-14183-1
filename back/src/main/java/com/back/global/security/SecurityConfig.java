@@ -9,7 +9,9 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizationRequestResolver;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -22,6 +24,8 @@ import static org.springframework.security.config.http.SessionCreationPolicy.STA
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomAuthenticationFilter customAuthenticationFilter;
+    private final AuthenticationSuccessHandler customOAuth2LoginSuccessHandler;
+    private final OAuth2AuthorizationRequestResolver customOAuth2AuthorizationRequestResolver;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
@@ -54,7 +58,13 @@ public class SecurityConfig {
                                         HeadersConfigurer.FrameOptionsConfig::sameOrigin
                                 )
                 )
-                .oauth2Login(oauth2 -> {})
+                .oauth2Login(oauth2Login -> oauth2Login
+                        .successHandler(customOAuth2LoginSuccessHandler)
+                        .authorizationEndpoint(
+                                authorizationEndpoint -> authorizationEndpoint
+                                        .authorizationRequestResolver(customOAuth2AuthorizationRequestResolver)
+                        )
+                )
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
