@@ -4,6 +4,7 @@ import com.back.domain.post.post.service.PostService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,8 +21,9 @@ public class ApiV1AdmPostController {
 
 
     public record AdmPostCountResBody(
-            long all
+            @NotNull long all
     ) {
+
     }
 
     @GetMapping("/count")

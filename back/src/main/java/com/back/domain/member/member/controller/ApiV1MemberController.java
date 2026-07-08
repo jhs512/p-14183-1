@@ -13,6 +13,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,7 +46,7 @@ public class ApiV1MemberController {
     @Transactional
     @Operation(summary = "가입")
     public RsData<MemberDto> join(
-            @RequestBody @Valid MemberJoinReqBody reqBody
+            @Valid @RequestBody MemberJoinReqBody reqBody
     ) {
         Member member = memberService.join(
                 reqBody.username(),
@@ -72,9 +73,9 @@ public class ApiV1MemberController {
     }
 
     public record MemberLoginResBody(
-            MemberDto item,
-            String apiKey,
-            String accessToken
+            @NotNull MemberDto item,
+            @NotNull String apiKey,
+            @NotNull String accessToken
     ) {
     }
 
@@ -82,7 +83,7 @@ public class ApiV1MemberController {
     @Transactional(readOnly = true)
     @Operation(summary = "로그인")
     public RsData<MemberLoginResBody> login(
-            @RequestBody @Valid MemberLoginReqBody reqBody
+            @Valid @RequestBody MemberLoginReqBody reqBody
     ) {
         Member member = memberService.findByUsername(reqBody.username())
                 .orElseThrow(() -> new ServiceException("401-1", "존재하지 않는 아이디입니다."));
@@ -126,7 +127,9 @@ public class ApiV1MemberController {
     @Transactional(readOnly = true)
     @Operation(summary = "내 정보")
     public MemberWithUsernameDto me() {
-        Member actor = memberService.findById(rq.getActor().getId()).get();
+        Member actor = memberService
+                .findById(rq.getActor().getId())
+                .get();
 
         return new MemberWithUsernameDto(actor);
     }

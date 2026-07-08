@@ -17,7 +17,7 @@ public class DevInitData {
             Ut.cmd.runAsync(
                     "npx{{DOT_CMD}}",
                     "--yes",
-                    "--package", "typescript",
+                    "--package", "typescript@v5",
                     "--package", "openapi-typescript",
                     "openapi-typescript", "http://localhost:8080/v3/api-docs/apiV1",
                     "-o", "../front/src/global/backend/apiV1/schema.d.ts"
