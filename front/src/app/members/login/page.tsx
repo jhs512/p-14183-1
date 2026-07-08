@@ -1,12 +1,8 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-
 import client from "@/global/backend/client";
 
 export default function Page() {
-  const router = useRouter();
-
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -60,7 +56,7 @@ export default function Page() {
           return;
         }
         alert(res.data.msg);
-        router.replace(`/`);
+        location.href = `/`;
       });
   };
 
