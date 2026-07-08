@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 
 import usePost from "@/domain/post/hooks/usePost";
+import { useAuthContext } from "@/global/auth/hooks/useAuth";
 
 export default function Page() {
   const router = useRouter();
@@ -11,6 +12,12 @@ export default function Page() {
   const id = Number(idStr);
 
   const { post, modifyPost } = usePost(id);
+
+  const { isLogin } = useAuthContext();
+
+  if (!isLogin) {
+    return <div>로그인 후 이용해주세요.</div>;
+  }
 
   if (post == null) return <div>로딩중...</div>;
 

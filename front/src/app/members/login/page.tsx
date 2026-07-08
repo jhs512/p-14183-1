@@ -7,7 +7,11 @@ import client from "@/global/backend/client";
 
 export default function Page() {
   const router = useRouter();
-  const { setLoginMember } = useAuthContext();
+  const { isLogin, setLoginMember } = useAuthContext();
+
+  if (isLogin) {
+    return <div>이미 로그인 상태입니다.</div>;
+  }
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();

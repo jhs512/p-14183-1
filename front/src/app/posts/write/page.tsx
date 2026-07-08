@@ -2,10 +2,17 @@
 
 import { useRouter } from "next/navigation";
 
+import { useAuthContext } from "@/global/auth/hooks/useAuth";
 import client from "@/global/backend/client";
 
 export default function Page() {
   const router = useRouter();
+
+  const { isLogin } = useAuthContext();
+
+  if (!isLogin) {
+    return <div>로그인 후 이용해주세요.</div>;
+  }
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
