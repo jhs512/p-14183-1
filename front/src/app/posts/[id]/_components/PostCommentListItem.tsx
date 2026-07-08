@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import type { components } from "@/lib/backend/apiV1/schema";
+import type { components } from "@/global/backend/apiV1/schema";
 
 import usePostComments from "../_hooks/usePostComments";
 

@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import client from "@/lib/backend/client";
+import client from "@/global/backend/client";
 
 export default function Page() {
   const router = useRouter();
@@ -22,7 +22,6 @@ export default function Page() {
     if (titleInput.value.length === 0) {
       alert("제목을 입력해주세요.");
       titleInput.focus();
-
       return;
     }
 
@@ -37,7 +36,6 @@ export default function Page() {
     if (contentTextarea.value.length === 0) {
       alert("내용을 입력해주세요.");
       contentTextarea.focus();
-
       return;
     }
 
@@ -76,6 +74,7 @@ export default function Page() {
           type="text"
           name="title"
           placeholder="제목"
+          autoFocus
           maxLength={100}
         />
         <textarea

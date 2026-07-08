@@ -4,9 +4,8 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
-import client from "@/lib/backend/client";
-
-import type { components } from "@/lib/backend/apiV1/schema";
+import type { components } from "@/global/backend/apiV1/schema";
+import client from "@/global/backend/client";
 
 type PostDto = components["schemas"]["PostDto"];
 
@@ -29,7 +28,9 @@ export default function Page() {
         <ul>
           {posts.map((post) => (
             <li key={post.id}>
-              <Link href={`/posts/${post.id}`}>{post.title}</Link>
+              <Link href={`/posts/${post.id}`}>
+                {post.id} : {post.title}
+              </Link>
             </li>
           ))}
         </ul>

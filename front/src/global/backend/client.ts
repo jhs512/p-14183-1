@@ -1,6 +1,6 @@
 import createClient from "openapi-fetch";
 
-import type { paths } from "@/lib/backend/apiV1/schema";
+import type { paths } from "@/global/backend/apiV1/schema";
 
 const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 

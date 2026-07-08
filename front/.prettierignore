@@ -10,7 +10,7 @@ dist
 build
 coverage
 tsconfig.tsbuildinfo
-src/lib/backend/*/schema.d.ts
+src/global/backend/*/schema.d.ts
 
 # 의존성 디렉토리
 node_modules
@@ -26,6 +26,4 @@ node_modules
 
 # 기타 무시할 파일
 package-lock.json
-pnpm-lock.yaml
 yarn.lock
-next-env.d.ts
