@@ -6,7 +6,9 @@ import client from "@/global/backend/client";
 type MemberDto = components["schemas"]["MemberDto"];
 
 export default function useAuth() {
-  const [loginMember, setLoginMember] = useState<MemberDto | null>(null);
+  const [loginMember, setLoginMember] = useState<MemberDto>(
+    null as unknown as MemberDto,
+  );
   const isLogin = loginMember !== null;
   const isAdmin = isLogin && loginMember.isAdmin;
 
@@ -19,7 +21,7 @@ export default function useAuth() {
   }, []);
 
   const clearLoginMember = () => {
-    setLoginMember(null);
+    setLoginMember(null as unknown as MemberDto);
   };
 
   const logout = (onSuccess: () => void) => {
@@ -35,28 +37,18 @@ export default function useAuth() {
     });
   };
 
-  const baseRs = {
+  return {
+    isLogin,
+    isAdmin,
+    loginMember,
     logout,
     setLoginMember,
-    isAdmin,
+    clearLoginMember,
   };
-
-  if (isLogin)
-    return {
-      isLogin: true,
-      loginMember,
-      ...baseRs,
-    } as const;
-
-  return {
-    isLogin: false,
-    loginMember: null,
-    ...baseRs,
-  } as const;
 }
 
-export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(
-  null,
+export const AuthContext = createContext<ReturnType<typeof useAuth>>(
+  null as unknown as ReturnType<typeof useAuth>,
 );
 
 export function AuthProvider({
