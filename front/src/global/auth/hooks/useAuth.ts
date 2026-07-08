@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, use, useEffect, useState } from "react";
 
 import { components } from "@/global/backend/apiV1/schema";
 import client from "@/global/backend/client";
@@ -48,3 +48,9 @@ export default function useAuth() {
 export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(
   null,
 );
+
+export function useAuthContext() {
+  const authState = use(AuthContext);
+
+  return authState;
+}

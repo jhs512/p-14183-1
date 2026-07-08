@@ -3,16 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { use } from "react";
-
-import { AuthContext } from "@/global/auth/hooks/useAuth";
+import { useAuthContext } from "@/global/auth/hooks/useAuth";
 
 export default function ClientLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const authState = use(AuthContext);
+  const authState = useAuthContext();
   const router = useRouter();
 
   const {

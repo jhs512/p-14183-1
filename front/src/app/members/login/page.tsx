@@ -2,14 +2,12 @@
 
 import { useRouter } from "next/navigation";
 
-import { use } from "react";
-
-import { AuthContext } from "@/global/auth/hooks/useAuth";
+import { useAuthContext } from "@/global/auth/hooks/useAuth";
 import client from "@/global/backend/client";
 
 export default function Page() {
   const router = useRouter();
-  const authState = use(AuthContext);
+  const authState = useAuthContext();
 
   const handleSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
