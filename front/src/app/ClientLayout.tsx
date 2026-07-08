@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { useEffect, useState } from "react";
 
@@ -22,7 +21,7 @@ function useAuth() {
     });
   }, []);
 
-  const logout = (onSuccess: () => void) => {
+  const logout = () => {
     client.DELETE("/api/v1/members/logout").then((res) => {
       if (res.error) {
         alert(res.error.msg);
@@ -30,7 +29,6 @@ function useAuth() {
       }
 
       setLoginMember(null);
-      onSuccess();
     });
   };
 
@@ -44,12 +42,7 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { loginMember, isLogin, logout: _logout } = useAuth();
-  const router = useRouter();
-
-  const logout = () => {
-    _logout(() => router.replace("/"));
-  };
+  const { loginMember, isLogin, logout } = useAuth();
 
   return (
     <>
