@@ -52,5 +52,7 @@ export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(
 export function useAuthContext() {
   const authState = use(AuthContext);
 
+  if (authState === null) throw new Error("AuthContext is not found");
+
   return authState;
 }
