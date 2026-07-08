@@ -10,13 +10,7 @@ import client from "@/global/backend/client";
 
 type MemberDto = components["schemas"]["MemberDto"];
 
-export default function ClientLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  const router = useRouter();
-
+function useAuth() {
   const [loginMember, setLoginMember] = useState<MemberDto | null>(null);
   const isLogin = loginMember !== null;
 
@@ -28,15 +22,30 @@ export default function ClientLayout({
     });
   }, []);
 
-  const logout = () => {
+  const logout = (onSuccess: () => void) => {
     client.DELETE("/api/v1/members/logout").then((res) => {
       if (res.error) {
         alert(res.error.msg);
         return;
       }
 
-      router.replace("/");
+      onSuccess();
     });
+  };
+
+  return { loginMember, isLogin, logout };
+}
+
+export default function ClientLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  const { loginMember, isLogin, logout: _logout } = useAuth();
+  const router = useRouter();
+
+  const logout = () => {
+    _logout(() => router.replace("/"));
   };
 
   return (
@@ -64,7 +73,7 @@ export default function ClientLayout({
           )}
           {isLogin && (
             <Link href="/members/me" className="p-2 rounded hover:bg-gray-100">
-              {loginMember.name}님의 정보
+              {loginMember?.name}님의 정보
             </Link>
           )}
         </nav>
