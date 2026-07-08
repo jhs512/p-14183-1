@@ -29,6 +29,7 @@ function useAuth() {
         return;
       }
 
+      setLoginMember(null);
       onSuccess();
     });
   };
