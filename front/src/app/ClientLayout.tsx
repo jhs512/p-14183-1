@@ -1,13 +1,18 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
-import { useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 
 import type { components } from "@/global/backend/apiV1/schema";
 import client from "@/global/backend/client";
 
 type MemberDto = components["schemas"]["MemberDto"];
+
+export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(
+  null,
+);
 
 function useAuth() {
   const [loginMember, setLoginMember] = useState<MemberDto | null>(null);
@@ -21,20 +26,32 @@ function useAuth() {
     });
   }, []);
 
-  const logout = () => {
+  const clearLoginMember = () => {
+    setLoginMember(null);
+  };
+
+  const logout = (onSuccess: () => void) => {
     client.DELETE("/api/v1/members/logout").then((res) => {
       if (res.error) {
         alert(res.error.msg);
         return;
       }
 
-      setLoginMember(null);
+      clearLoginMember();
+
+      onSuccess();
     });
   };
 
-  if (isLogin) return { isLogin: true, loginMember, logout } as const;
+  if (isLogin)
+    return { isLogin: true, loginMember, logout, setLoginMember } as const;
 
-  return { isLogin: false, loginMember: null, logout } as const;
+  return {
+    isLogin: false,
+    loginMember: null,
+    logout,
+    setLoginMember,
+  } as const;
 }
 
 export default function ClientLayout({
@@ -42,10 +59,17 @@ export default function ClientLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { loginMember, isLogin, logout } = useAuth();
+  const authState = useAuth();
+  const router = useRouter();
+
+  const { loginMember, isLogin, logout: _logout } = authState;
+
+  const logout = () => {
+    _logout(() => router.replace("/"));
+  };
 
   return (
-    <>
+    <AuthContext value={authState}>
       <header>
         <nav className="flex">
           <Link href="/" className="p-2 rounded hover:bg-gray-100">
@@ -76,6 +100,6 @@ export default function ClientLayout({
       </header>
       <main className="flex-1 flex flex-col">{children}</main>
       <footer className="text-center p-2">푸터</footer>
-    </>
+    </AuthContext>
   );
 }
