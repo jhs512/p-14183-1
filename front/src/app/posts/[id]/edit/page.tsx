@@ -2,7 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 
-import usePost from "../_hooks/usePost";
+import usePost from "@/domain/post/hooks/usePost";
 
 export default function Page() {
   const router = useRouter();
