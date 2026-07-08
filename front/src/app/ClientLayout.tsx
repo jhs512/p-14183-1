@@ -3,56 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { createContext, useEffect, useState } from "react";
-
-import type { components } from "@/global/backend/apiV1/schema";
-import client from "@/global/backend/client";
-
-type MemberDto = components["schemas"]["MemberDto"];
-
-export const AuthContext = createContext<ReturnType<typeof useAuth> | null>(
-  null,
-);
-
-function useAuth() {
-  const [loginMember, setLoginMember] = useState<MemberDto | null>(null);
-  const isLogin = loginMember !== null;
-
-  useEffect(() => {
-    client.GET("/api/v1/members/me").then((res) => {
-      if (res.error) return;
-
-      setLoginMember(res.data);
-    });
-  }, []);
-
-  const clearLoginMember = () => {
-    setLoginMember(null);
-  };
-
-  const logout = (onSuccess: () => void) => {
-    client.DELETE("/api/v1/members/logout").then((res) => {
-      if (res.error) {
-        alert(res.error.msg);
-        return;
-      }
-
-      clearLoginMember();
-
-      onSuccess();
-    });
-  };
-
-  if (isLogin)
-    return { isLogin: true, loginMember, logout, setLoginMember } as const;
-
-  return {
-    isLogin: false,
-    loginMember: null,
-    logout,
-    setLoginMember,
-  } as const;
-}
+import useAuth, { AuthContext } from "@/global/auth/hooks/useAuth";
 
 export default function ClientLayout({
   children,

@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 
 import { use } from "react";
 
-import { AuthContext } from "@/app/ClientLayout";
+import { AuthContext } from "@/global/auth/hooks/useAuth";
 import client from "@/global/backend/client";
 
 export default function Page() {
