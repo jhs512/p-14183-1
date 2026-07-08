@@ -3,7 +3,12 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+import { useEffect, useState } from "react";
+
+import type { components } from "@/global/backend/apiV1/schema";
 import client from "@/global/backend/client";
+
+type MemberDto = components["schemas"]["MemberDto"];
 
 export default function ClientLayout({
   children,
@@ -11,6 +16,17 @@ export default function ClientLayout({
   children: React.ReactNode;
 }>) {
   const router = useRouter();
+
+  const [loginMember, setLoginMember] = useState<MemberDto | null>(null);
+  const isLogin = loginMember !== null;
+
+  useEffect(() => {
+    client.GET("/api/v1/members/me").then((res) => {
+      if (res.error) return;
+
+      setLoginMember(res.data);
+    });
+  }, []);
 
   const logout = () => {
     client.DELETE("/api/v1/members/logout").then((res) => {
@@ -33,12 +49,24 @@ export default function ClientLayout({
           <Link href="/posts" className="p-2 rounded hover:bg-gray-100">
             글 목록
           </Link>
-          <Link href="/members/login" className="p-2 rounded hover:bg-gray-100">
-            로그인
-          </Link>
-          <button onClick={logout} className="p-2 rounded hover:bg-gray-100">
-            로그아웃
-          </button>
+          {!isLogin && (
+            <Link
+              href="/members/login"
+              className="p-2 rounded hover:bg-gray-100"
+            >
+              로그인
+            </Link>
+          )}
+          {isLogin && (
+            <button onClick={logout} className="p-2 rounded hover:bg-gray-100">
+              로그아웃
+            </button>
+          )}
+          {isLogin && (
+            <Link href="/members/me" className="p-2 rounded hover:bg-gray-100">
+              {loginMember.name}님의 정보
+            </Link>
+          )}
         </nav>
       </header>
       <main className="flex-1 flex flex-col">{children}</main>
