@@ -3,24 +3,30 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import useAuth, { AuthContext } from "@/global/auth/hooks/useAuth";
+import { use } from "react";
+
+import { AuthContext } from "@/global/auth/hooks/useAuth";
 
 export default function ClientLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const authState = useAuth();
+  const authState = use(AuthContext);
   const router = useRouter();
 
-  const { loginMember, isLogin, logout: _logout } = authState;
+  const {
+    loginMember = null,
+    isLogin = false,
+    logout: _logout = () => {},
+  } = authState ?? {};
 
   const logout = () => {
     _logout(() => router.replace("/"));
   };
 
   return (
-    <AuthContext value={authState}>
+    <>
       <header>
         <nav className="flex">
           <Link href="/" className="p-2 rounded hover:bg-gray-100">
@@ -44,13 +50,13 @@ export default function ClientLayout({
           )}
           {isLogin && (
             <Link href="/members/me" className="p-2 rounded hover:bg-gray-100">
-              {loginMember.name}님의 정보
+              {loginMember?.name}님의 정보
             </Link>
           )}
         </nav>
       </header>
       <main className="flex-1 flex flex-col">{children}</main>
       <footer className="text-center p-2">푸터</footer>
-    </AuthContext>
+    </>
   );
 }
