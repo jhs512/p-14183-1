@@ -4,30 +4,20 @@ import Link from "next/link";
 
 import { useEffect, useState } from "react";
 
-import { useAuthContext } from "@/global/auth/hooks/useAuth";
+import withAdmin from "@/global/auth/hoc/withAdmin";
 import type { components } from "@/global/backend/apiV1/schema";
 import client from "@/global/backend/client";
 
 type MemberWithUsernameDto = components["schemas"]["MemberWithUsernameDto"];
 
-export default function Page() {
+export default withAdmin(function Page() {
   const [members, setMembers] = useState<MemberWithUsernameDto[] | null>(null);
-
-  const { isLogin, isAdmin } = useAuthContext();
 
   useEffect(() => {
     client
       .GET("/api/v1/adm/members")
       .then((res) => res.data && setMembers(res.data));
   }, []);
-
-  if (!isLogin) {
-    return <div>로그인 후 이용해주세요.</div>;
-  }
-
-  if (!isAdmin) {
-    return <div>관리자 권한이 없습니다.</div>;
-  }
 
   if (members == null) return <div>로딩중...</div>;
 
@@ -50,4 +40,4 @@ export default function Page() {
       )}
     </>
   );
-}
+});
