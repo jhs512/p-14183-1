@@ -2,13 +2,7 @@
 
 import { useParams, useRouter } from "next/navigation";
 
-import { useEffect, useState } from "react";
-
-import client from "@/lib/backend/client";
-
-import type { components } from "@/lib/backend/apiV1/schema";
-
-type PostWithContentDto = components["schemas"]["PostWithContentDto"];
+import usePost from "../_hooks/usePost";
 
 export default function Page() {
   const router = useRouter();
@@ -16,19 +10,7 @@ export default function Page() {
   const { id: idStr } = useParams<{ id: string }>();
   const id = Number(idStr);
 
-  const [post, setPost] = useState<PostWithContentDto | null>(null);
-
-  useEffect(() => {
-    client
-      .GET("/api/v1/posts/{id}", {
-        params: {
-          path: {
-            id,
-          },
-        },
-      })
-      .then((res) => res.data && setPost(res.data));
-  }, [id]);
+  const { post, modifyPost } = usePost(id);
 
   if (post == null) return <div>로딩중...</div>;
 
@@ -58,41 +40,10 @@ export default function Page() {
       return;
     }
 
-<<<<<<< HEAD
-    apiFetch(`/api/v1/posts/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({
-        title: titleInput.value,
-        content: contentTextarea.value,
-      }),
-    })
-      .then((data) => {
-        alert(data.msg);
-
-        router.replace(`/posts/${id}`);
-=======
-    client
-      .PUT("/api/v1/posts/{id}", {
-        params: {
-          path: {
-            id,
-          },
-        },
-        body: {
-          title: titleInput.value,
-          content: contentTextarea.value,
-        },
->>>>>>> 029d90e (044)
-      })
-      .then((res) => {
-        if (res.error) {
-          alert(res.error.msg);
-          return;
-        }
-
-        alert(res.data.msg);
-        router.replace(`/posts/${id}`);
-      });
+    modifyPost(post.id, titleInput.value, contentTextarea.value, (data) => {
+      alert(data.msg);
+      router.replace(`/posts/${id}`);
+    });
   };
 
   return (
