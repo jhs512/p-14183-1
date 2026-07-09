@@ -14,7 +14,11 @@ export default function Page() {
   const [post, setPost] = useState<PostWithContentDto | null>(null);
 
   useEffect(() => {
-    apiFetch(`/api/v1/posts/${id}`).then(setPost);
+    apiFetch(`/api/v1/posts/${id}`)
+      .then(setPost)
+      .catch((error) => {
+        alert(`${error.resultCode} : ${error.msg}`);
+      });
   }, []);
 
   if (post == null) return <div>로딩중...</div>;
@@ -51,11 +55,15 @@ export default function Page() {
         title: titleInput.value,
         content: contentTextarea.value,
       }),
-    }).then((data) => {
-      alert(data.msg);
+    })
+      .then((data) => {
+        alert(data.msg);
 
-      router.replace(`/posts/${id}`);
-    });
+        router.replace(`/posts/${id}`);
+      })
+      .catch((error) => {
+        alert(`${error.resultCode} : ${error.msg}`);
+      });
   };
 
   return (
